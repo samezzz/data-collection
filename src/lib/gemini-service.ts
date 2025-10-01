@@ -22,29 +22,25 @@ export class GeminiTranscriptionFilter {
   // Geocoding function to validate and get official location names
   private async geocodeLocation(location: string): Promise<string | null> {
     try {
-      const encodedLocation = encodeURIComponent(location + ", Ghana");
+      console.log("Geocoding location:", location);
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodedLocation}&countrycodes=gh&limit=1&addressdetails=1`
+        `/api/geocode-location?location=${encodeURIComponent(location)}`
       );
       
       if (!response.ok) {
+        console.log("Geocoding API error:", response.status);
         return null;
       }
       
       const data = await response.json();
+      console.log("Geocoding response:", data);
       
-      if (data && data.length > 0) {
-        const result = data[0];
-        // Return the most complete address available
-        const displayName = result.display_name;
-        if (displayName) {
-          // Extract just the Ghanaian location part (remove country and extra details)
-          const parts = displayName.split(',');
-          const ghanaLocation = parts.slice(0, -1).join(',').trim(); // Remove "Ghana" from the end
-          return ghanaLocation;
-        }
+      if (data.officialLocation) {
+        console.log("Found official location:", data.officialLocation);
+        return data.officialLocation;
       }
       
+      console.log("No location found for:", location);
       return null;
     } catch (error) {
       console.error("Geocoding error:", error);
