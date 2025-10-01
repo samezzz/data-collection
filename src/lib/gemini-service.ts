@@ -23,8 +23,14 @@ export class GeminiTranscriptionFilter {
   private async geocodeLocation(location: string): Promise<string | null> {
     try {
       console.log("Geocoding location:", location);
+      
+      // Check if we're on the client side or server side
+      const baseUrl = typeof window !== 'undefined' 
+        ? window.location.origin 
+        : process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+      
       const response = await fetch(
-        `/api/geocode-location?location=${encodeURIComponent(location)}`
+        `${baseUrl}/api/geocode-location?location=${encodeURIComponent(location)}`
       );
       
       if (!response.ok) {
