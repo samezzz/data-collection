@@ -72,12 +72,12 @@ export default function DemoPage() {
                 </div>
                 
                 <div className="p-4 bg-blue-50 rounded-lg">
-                  <p className="text-sm text-blue-700">
+                <p className="text-sm text-blue-700">
                     <strong>Try saying:</strong><br />
-                    • "Kwame" (Ghanaian name)<br />
-                    • "Akosua" (Ghanaian name)<br />
-                    • "Accra" (Ghanaian city)<br />
-                    • "Kumasi" (Ghanaian city)
+                    • &quot;Kwame&quot; (Ghanaian name)<br />
+                    • &quot;Akosua&quot; (Ghanaian name)<br />
+                    • &quot;Accra&quot; (Ghanaian city)<br />
+                    • &quot;Kumasi&quot; (Ghanaian city)
                   </p>
                 </div>
               </div>

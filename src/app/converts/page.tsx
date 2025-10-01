@@ -1,8 +1,9 @@
 import { createClient } from '@/app/utils/supabase/server'
-import { cookies } from 'next/headers'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface Convert {
   id: string
@@ -14,7 +15,6 @@ interface Convert {
 }
 
 export default async function ConvertsPage() {
-  const cookieStore = await cookies()
   const supabase = await createClient()
 
   const { data: converts, error } = await supabase
@@ -71,10 +71,12 @@ export default async function ConvertsPage() {
                     <TableRow key={convert.id}>
                       <TableCell>
                         <div className="w-16 h-16 rounded-lg overflow-hidden border">
-                          <img
+                          <Image
                             src={convert.photo}
                             alt={`${convert.full_name}'s photo`}
                             className="w-full h-full object-cover"
+                            width={64}
+                            height={64}
                           />
                         </div>
                       </TableCell>
@@ -106,9 +108,9 @@ export default async function ConvertsPage() {
               <div className="text-center py-8">
                 <p className="text-muted-foreground text-lg">No converts registered yet.</p>
                 <p className="text-muted-foreground text-sm mt-2">
-                  <a href="/" className="text-primary hover:underline">
+                  <Link href="/" className="text-primary hover:underline">
                     Register the first convert
-                  </a>
+                  </Link>
                 </p>
               </div>
             )}

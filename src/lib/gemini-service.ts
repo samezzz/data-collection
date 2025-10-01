@@ -145,7 +145,7 @@ Only return the JSON, no other text.`;
   };
 } catch (apiError: unknown) {
   // Handle quota exceeded or other API errors
-    if ((apiError as any)?.status === 429 || (apiError as any)?.message?.includes('quota')) {
+    if ((apiError as { status?: number; message?: string })?.status === 429 || (apiError as { status?: number; message?: string })?.message?.includes('quota')) {
     console.warn("Gemini API quota exceeded, using fallback validation");
     
     // Fallback to local validation only

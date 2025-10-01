@@ -26,7 +26,7 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
       stopCamera()
     }
   }, [])
-
+  
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
