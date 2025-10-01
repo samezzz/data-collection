@@ -121,7 +121,7 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
           onClick={capturePhoto}
           disabled={!stream || !!cameraError}
           size="lg"
-          className="gap-2 bg-accent hover:bg-accent/90 text-accent-foreground"
+          className="gap-2 bg-orange-500 hover:bg-orange-400/90 text-accent-foreground"
         >
           <Camera className="h-4 w-4" />
           Capture Photo

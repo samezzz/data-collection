@@ -192,7 +192,7 @@ export function RegistrationForm() {
 
           <Button 
             type="submit" 
-            className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" 
+            className="w-full bg-orange-500 hover:bg-orange-400/90 text-accent-foreground" 
             size="lg"
             disabled={isSubmitting}
           >
