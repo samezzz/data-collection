@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Camera, RotateCcw } from "lucide-react"
+import Image from "next/image"
 
 interface CameraCaptureProps {
   onCapture: (imageData: string) => void
@@ -16,7 +17,10 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [cameraError, setCameraError] = useState<string>("")
 
+  const [isClient, setIsClient] = useState(false)
+
   useEffect(() => {
+    setIsClient(true)
     startCamera()
     return () => {
       stopCamera()
@@ -83,8 +87,18 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
       <div className="relative">
         {/* Circular preview container */}
         <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-primary bg-muted">
-          {capturedImage ? (
-            <img src={capturedImage || "/placeholder.svg"} alt="Captured" className="w-full h-full object-cover" />
+          {!isClient ? (
+            <div className="w-full h-full bg-muted flex items-center justify-center">
+              <Camera className="h-8 w-8 text-muted-foreground" />
+            </div>
+          ) : capturedImage ? (
+            <Image 
+            src={capturedImage || "/placeholder.svg"} 
+            alt="Captured" 
+            className="w-full h-full object-cover"
+            width={192}
+            height={192}
+          />
           ) : (
             <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" />
           )}

@@ -72,7 +72,7 @@ export function SpeechToTextInputEnhanced({
   fieldType = "name"
 }: SpeechToTextInputProps) {
   const [isRecording, setIsRecording] = useState(false)
-  const [transcript, setTranscript] = useState("")
+  const [, setTranscript] = useState("")
   const [alternatives, setAlternatives] = useState<string[]>([])
   const [showAlternatives, setShowAlternatives] = useState(false)
   const [isSupported, setIsSupported] = useState(true)

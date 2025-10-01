@@ -27,7 +27,6 @@ export function RegistrationForm() {
   })
 
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
-  const [enableGeminiFilter] = useState(true)
   const [formKey, setFormKey] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -121,7 +120,7 @@ export function RegistrationForm() {
   return (
     <Card className="border-2">
       <CardHeader>
-        <CardTitle className="text-2xl">Convert's Information</CardTitle>
+        <CardTitle className="text-2xl">Convert&apos;s Information</CardTitle>
         <CardDescription>Use the microphone button to fill fields with your voice</CardDescription>
       </CardHeader>
       <CardContent>

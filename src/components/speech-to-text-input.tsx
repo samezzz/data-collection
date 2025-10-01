@@ -46,7 +46,7 @@ declare global {
 
 export function SpeechToTextInput({ id, value, onChange, placeholder, error }: SpeechToTextInputProps) {
   const [isRecording, setIsRecording] = useState(false)
-  const [transcript, setTranscript] = useState("")
+  const [, setTranscript] = useState("")
   const [alternatives, setAlternatives] = useState<string[]>([])
   const [showAlternatives, setShowAlternatives] = useState(false)
   const [isSupported, setIsSupported] = useState(true)

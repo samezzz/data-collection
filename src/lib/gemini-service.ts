@@ -13,7 +13,7 @@ export interface FilteredTranscription {
 }
 
 export class GeminiTranscriptionFilter {
-  private model: any;
+  private model: ReturnType<typeof genAI.getGenerativeModel>;
 
   constructor() {
     this.model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
@@ -143,9 +143,9 @@ Only return the JSON, no other text.`;
     officialLocation: filteredResult.officialLocation,
     nameValidation: filteredResult.nameValidation
   };
-} catch (apiError: any) {
+} catch (apiError: unknown) {
   // Handle quota exceeded or other API errors
-  if (apiError.status === 429 || apiError.message?.includes('quota')) {
+    if ((apiError as any)?.status === 429 || (apiError as any)?.message?.includes('quota')) {
     console.warn("Gemini API quota exceeded, using fallback validation");
     
     // Fallback to local validation only
