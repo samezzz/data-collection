@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Camera, RotateCcw } from "lucide-react"
+import { Camera, RotateCcw, FlipHorizontal } from "lucide-react"
 import Image from "next/image"
 
 interface CameraCaptureProps {
@@ -16,6 +16,7 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
   const [stream, setStream] = useState<MediaStream | null>(null)
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
   const [cameraError, setCameraError] = useState<string>("")
+  const [facingMode, setFacingMode] = useState<"user" | "environment">("environment")
 
   const [isClient, setIsClient] = useState(false)
 
@@ -26,11 +27,23 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
       stopCamera()
     }
   }, [])
+
+  // Restart camera when facing mode changes
+  useEffect(() => {
+    if (isClient && !capturedImage) {
+      startCamera()
+    }
+  }, [facingMode])
   
   const startCamera = async () => {
     try {
+      // Stop existing stream first
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop())
+      }
+      
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user", width: 640, height: 640 },
+        video: { facingMode, width: 640, height: 640 },
         audio: false,
       })
       setStream(mediaStream)
@@ -82,6 +95,10 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
     startCamera()
   }
 
+  const switchCamera = () => {
+    setFacingMode(prev => prev === "environment" ? "user" : "environment")
+  }
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="relative">
@@ -100,7 +117,13 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
             height={192}
           />
           ) : (
-            <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover scale-x-[-1]" />
+            <video 
+              ref={videoRef} 
+              autoPlay 
+              playsInline 
+              muted 
+              className={`w-full h-full object-cover ${facingMode === "user" ? "scale-x-[-1]" : ""}`} 
+            />
           )}
         </div>
         <canvas ref={canvasRef} className="hidden" />
@@ -109,24 +132,42 @@ export function CameraCapture({ onCapture, error }: CameraCaptureProps) {
       {/* Error messages */}
       {(cameraError || error) && <p className="text-sm text-destructive text-center">{cameraError || error}</p>}
 
-      {/* Capture/Retake button */}
-      {capturedImage ? (
-        <Button type="button" onClick={retakePhoto} variant="outline" size="lg" className="gap-2 bg-transparent">
-          <RotateCcw className="h-4 w-4" />
-          Retake Photo
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          onClick={capturePhoto}
-          disabled={!stream || !!cameraError}
-          size="lg"
-          className="gap-2 bg-orange-500 hover:bg-orange-400/90 text-accent-foreground"
-        >
-          <Camera className="h-4 w-4" />
-          Capture Photo
-        </Button>
-      )}
+      {/* Camera controls */}
+      <div className="flex gap-3">
+        {/* Camera switch button - only show when not captured */}
+        {!capturedImage && (
+          <Button
+            type="button"
+            onClick={switchCamera}
+            variant="outline"
+            size="lg"
+            className="gap-2"
+            disabled={!!cameraError}
+          >
+            <FlipHorizontal className="h-4 w-4" />
+            {facingMode === "environment" ? "Front Camera" : "Back Camera"}
+          </Button>
+        )}
+
+        {/* Capture/Retake button */}
+        {capturedImage ? (
+          <Button type="button" onClick={retakePhoto} variant="outline" size="lg" className="gap-2 bg-transparent">
+            <RotateCcw className="h-4 w-4" />
+            Retake Photo
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            onClick={capturePhoto}
+            disabled={!stream || !!cameraError}
+            size="lg"
+            className="gap-2 bg-orange-500 hover:bg-orange-400/90 text-accent-foreground"
+          >
+            <Camera className="h-4 w-4" />
+            Capture Photo
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
